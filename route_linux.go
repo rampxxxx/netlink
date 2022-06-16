@@ -41,7 +41,6 @@ func (s Scope) String() string {
 	}
 }
 
-
 const (
 	FLAG_ONLINK    NextHopFlag = unix.RTNH_F_ONLINK
 	FLAG_PERVASIVE NextHopFlag = unix.RTNH_F_PERVASIVE
@@ -1125,7 +1124,7 @@ func deserializeRoute(m []byte) (Route, error) {
 			route.Table = int(native.Uint32(attr.Value[0:4]))
 		case unix.RTA_MULTIPATH:
 			parseRtNexthop := func(value []byte) (*NexthopInfo, []byte, error) {
-				if len(value) < unix.SizeofRtNexthop {
+				if len(value) < 32 {
 					return nil, nil, fmt.Errorf("lack of bytes")
 				}
 				nh := nl.DeserializeRtNexthop(value)
