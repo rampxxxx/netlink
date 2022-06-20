@@ -48,7 +48,10 @@ type RtNexthop struct {
 }
 
 func DeserializeRtNexthop(b []byte) *RtNexthop {
-	return (*RtNexthop)(unsafe.Pointer(&b[0:unix.SizeofRtNexthop][0]))
+	return &RtNexthop{
+		RtNexthop: *((*unix.RtNexthop)(unsafe.Pointer(&b[0:unix.SizeofRtNexthop][0]))),
+		Children:  []NetlinkRequestData{},
+	}
 }
 
 func (msg *RtNexthop) Len() int {
